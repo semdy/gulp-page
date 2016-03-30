@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<link rel="stylesheet" href="/dist/a/css/style.css">
+	<script src="//cdn.bootcss.com/jquery/1.9.1/jquery.js"></script>
+	<script src="//cdn.bootcss.com/lodash.js/4.6.1/lodash.js"></script>
+	<script src="//cdn.bootcss.com/handlebars.js/4.0.5/handlebars.js"></script>
+</head>
+<body>
+	<script type="text/template" id="tpl">
+	<% _.each(datas, function (item) { %>
+	  <div class="outer">
+	    <%= item.title %> - <%= item.url %> - <%= item.film %>
+	  </div>
+	<% }); %>
+	</script>
+	<div class="entry-body"></div>
+	<script id="entry-template" type="text/x-handlebars-template">
+	  <div class="entry">
+	    <h1>{{title}}</h1>
+	    <div class="body">
+	        {{body}}
+	    </div>
+	</div>
+	</script>
+	<script type="text/javascript">
+	var source   = $("#entry-template").html();
+	var context = {title: "My New Post", body: "This is my first post!"}
+	var template = Handlebars.compile(source);
+	var html    = template(context);
+	console.log(html)
+	$('.entry-body').html(html);
+	var datas = [
+	  {
+	    title: '标题1',
+	    url: 'http://www.baidu.com',
+	    film: '电影名称1'
+	  },
+	  {
+	    title: '标题2',
+	    url: 'http://www.baidu.com',
+	    film: '电影名称2'
+	  },
+	  {
+	    title: '标题3',
+	    url: 'http://www.baidu.com',
+	    film: '电影名称3'
+	  },
+	  {
+	    title: '标题4',
+	    url: 'http://www.baidu.com',
+	    film: '电影名称4'
+	  },
+	  {
+	    title: '标题5',
+	    url: 'http://www.baidu.com',
+	    film: '电影名称5'
+	  }
+	];
+
+	// $('body').html( _.template($('#tpl').html(), datas) );
+	</script>
+</body>
+</html>
