@@ -12,10 +12,11 @@
 
 var gulp = require('gulp'),
   os = require('os'),
+  path = require('path'),
   connect = require('gulp-connect'), //- 创建服务器
   watch = require('gulp-watch'), //监听文件变化
   px2rem = require('gulp-px3rem'), //- px转换rem
-  sass = require('gulp-ruby-sass'), //- sass处理
+  sass = require('gulp-sass'), //- sass处理
   autoprefixer = require('gulp-autoprefixer'), //- 添加兼容前缀
   cssnano = require('gulp-cssnano'), //-压缩css
   sourcemaps = require('gulp-sourcemaps'), //-添加map文件
@@ -25,15 +26,21 @@ var gulp = require('gulp'),
   concat = require('gulp-concat'), //文件合并all-in-one
   base64 = require('gulp-base64'), //把后缀#base64且小于32k的图片转换成base64
   uncss = require('gulp-uncss'), //根据html和引用的css删除冗余css样式
+  // webpack = require('webpack'),
+  // webpackConfig = require('./webpack.config.js'),
   spritesmith = require('gulp.spritesmith'); //雪碧图
 
 var _html = 'html/index.html', //需要处理的html文件
-  _scssArr = ['src/a/scss/*.scss', 'src/lib/scss/*.scss'], //需要处理的scss数组
-  _jsArr = ['src/a/js/*.js', 'src/lib/js/*.js', '800bank_lib_pc.js'], //需要处理的js数组
+  _scssArr = ['src/page/a/scss/*.scss', 'src/lib/scss/*.scss'], //需要处理的scss数组
+  _jsArr = ['src/page/a/js/*.js', 'src/lib/js/*.js'], //需要处理的js数组
   _imgArr = [], //需要处理的img数组
+
   _cssDistDir = 'dist/css/a/', //发布的css目录
+  _cssMapsDir = 'dist/maps/a/', // 发布的cssMaps目录
   _cssDistName = 'a.min.css', //发布的css名称
+
   _jsDistDir = 'dist/js/a/', //发布的js目录
+  _jsMapsDir = 'dist/maps/a/', // 发布的jsMaps目录
   _jsDistName = 'a.min.js'; //发布到js名称
 
 var browser = os.platform() === 'linux' ? 'google-chrome' : (
@@ -71,27 +78,35 @@ gulp.task('sprite', function() {
 
 //scss预处理（合并，解析，兼容前缀，压缩，sourcemaps）
 gulp.task('scssTask', function() {
-  return sass(_scssArr, {
-      sourcemap: true
-    }) //- 需要处理的scss文件，放到一个数组里
+  gulp.src(_scssArr) //- 需要处理的scss文件，放到一个数组里
+    .pipe(sourcemaps.init())
+    .pipe(sass())
     .on('error', sass.logError)
     .pipe(concat(_cssDistName)) //合并scss
     .pipe(autoprefixer()) //- 添加兼容性前缀
     // .pipe(px2rem())
     // .pipe(base64({extensions: [/\.(jpg|png)#base64/i]}))  //后缀为#base64的小于32k的图片会被转为base64
     // .pipe(cssnano()) //-压缩css
-    .pipe(sourcemaps.write('./')) //- maps另存
+    .pipe(sourcemaps.write(path.relative(_cssDistDir, _cssMapsDir), {
+      sourceMappingURL: function(file) {
+        return '/' + _cssMapsDir + file.relative + '.map';
+      }
+    })) //- maps另存
     .pipe(gulp.dest(_cssDistDir)) //- 处理得到的css文件发布到对应目录
     .pipe(md5(10, _html)); //处理html引用加入md5去缓存
 });
 
 //js预处理（合并，压缩混淆，sourcemaps）
 gulp.task('jsTask', function() {
-  gulp.src(_jsArr) //- 需要处理的scss文件，放到一个字符串里
+  gulp.src(_jsArr) //- 需要处理的js文件，放到一个字符串里
     .pipe(sourcemaps.init()) //- map初始化
     .pipe(concat(_jsDistName)) //合并js
     .pipe(uglify()) //-压缩混淆js
-    .pipe(sourcemaps.write('./')) //- map另存
+    .pipe(sourcemaps.write(path.relative(_jsDistDir, _jsMapsDir), {
+      sourceMappingURL: function(file) {
+        return '/' + _jsMapsDir + file.relative + '.map';
+      }
+    })) //- maps另存
     .pipe(gulp.dest(_jsDistDir)) //- 处理得到的js文件发布到对应目录
     .pipe(md5(10, _html)); //处理html引用加入md5去缓存
 });

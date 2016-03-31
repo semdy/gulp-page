@@ -1,11 +1,5 @@
 body {
-  margin: 0;
-  padding: 0; }
-
-
-
-body {
-  background: #a00; }
+  background: #0a0; }
 
 .a {
   display: block;
@@ -51,6 +45,8 @@ body {
 .d2 {
   background-image: url("/src/img/a/d1.jpg#base64"); }
 
+body {
+  margin: 0;
+  padding: 0; }
 
-
-/*# sourceMappingURL=a.min.css.map */
+/*# sourceMappingURL=/dist/maps/a/a.min.css.map */
