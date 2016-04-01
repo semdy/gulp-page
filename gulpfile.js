@@ -1,6 +1,6 @@
 /**
  * autor：gxl
- * blog：http://blog.csdn.net/gengxuelei
+ * repository：https://github.com/saopang/gulp-page.git
  * 热加载，本地服务器，文件监听，动态刷新
  * 处理图片（优化图片，压缩）
  * 处理scss（压缩合并，兼容前缀，base64，md5，sourcesmaps，雪碧图，px2rem高清方案）

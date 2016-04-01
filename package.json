@@ -2,7 +2,7 @@
   "name": "gulp-page",
   "version": "1.0.0",
   "description": "a gulp config, handle single page--html, css, js, img",
-  "repository": "git://github.com/a/b.git",
+  "repository": "https://github.com/saopang/gulp-page.git",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
