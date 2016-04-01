@@ -1,5 +1,5 @@
 body {
-  background: #0a0;
+  background: #c00;
 }
 .a {
   display: block;
@@ -32,16 +32,4 @@ body {
 }
 .b2 {
   background-image: url("/src/img/a/b1.jpg#base64");
-}
-.c1 {
-  background-image: url("/src/img/a/c1.png");
-}
-.c2 {
-  background-image: url("/src/img/a/c1.png#base64");
-}
-.d1 {
-  background-image: url("/src/img/a/d1.jpg");
-}
-.d2 {
-  background-image: url("/src/img/a/d1.jpg#base64");
 }

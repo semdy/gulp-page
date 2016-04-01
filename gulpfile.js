@@ -26,8 +26,7 @@ var gulp = require('gulp'),
   concat = require('gulp-concat'), //文件合并all-in-one
   base64 = require('gulp-base64'), //把后缀#base64且小于32k的图片转换成base64
   uncss = require('gulp-uncss'), //根据html和引用的css删除冗余css样式
-  // webpack = require('webpack'),
-  // webpackConfig = require('./webpack.config.js'),
+  webpack = require('webpack'),  //webpack模块化打包js
   spritesmith = require('gulp.spritesmith'); //雪碧图
 
 var _html = 'html/index.html', //需要处理的html文件
@@ -111,6 +110,37 @@ gulp.task('jsTask', function() {
     .pipe(md5(10, _html)); //处理html引用加入md5去缓存
 });
 
+// webpack打包js
+gulp.task('webpack', function() {
+  webpack({
+    entry: "./src/page/a/js/script.js",
+    output: {
+      path: './dist/js/a/',
+      filename: "a.bundle.js"
+    },
+    module: {
+      loaders: [{
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel',
+        query: {
+          presets: ['es2015']
+        }
+      }]
+    },
+    resolve: {
+      extensions: ['', '.js', '.json']
+    }
+  }, function(err, stats) {
+    if(err) console.log(err);
+  });
+
+});
+
+gulp.task('webpackTask', ['webpack'], function() {
+  gulp.src('./dist/js/a/a.bundle.js')
+    .pipe(md5(10, _html)); //处理html引用加入md5去缓存
+});
 
 //监听文件变化，处理scss，刷新浏览器
 gulp.task('watch', function() {
