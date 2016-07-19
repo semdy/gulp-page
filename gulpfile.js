@@ -27,7 +27,8 @@ var gulp = require('gulp'),
   base64 = require('gulp-base64'), //把后缀#base64且小于32k的图片转换成base64
   uncss = require('gulp-uncss'), //根据html和引用的css删除冗余css样式
   webpack = require('webpack'),  //webpack模块化打包js
-  spritesmith = require('gulp.spritesmith'); //雪碧图
+  spritesmith = require('gulp.spritesmith'), //雪碧图
+  rename = require("gulp-rename");  // rename重命名
 
 var _html = 'html/index.html', //需要处理的html文件
   _scssArr = ['src/page/a/scss/*.scss', 'src/lib/scss/*.scss'], //需要处理的scss数组
@@ -83,9 +84,10 @@ gulp.task('scssTask', function() {
     .on('error', sass.logError)
     .pipe(concat(_cssDistName)) //合并scss
     .pipe(autoprefixer()) //- 添加兼容性前缀
-    // .pipe(px2rem())
+    // .pipe(px2rem({remUnit: 75}))
     // .pipe(base64({extensions: [/\.(jpg|png)#base64/i]}))  //后缀为#base64的小于32k的图片会被转为base64
     // .pipe(cssnano()) //-压缩css
+    .pipe(rename(_cssDistName))  //重命名css
     .pipe(sourcemaps.write(path.relative(_cssDistDir, _cssMapsDir), {
       sourceMappingURL: function(file) {
         return '/' + _cssMapsDir + file.relative + '.map';
